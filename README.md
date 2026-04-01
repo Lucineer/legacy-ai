@@ -1,82 +1,32 @@
-# Legacy AI — A Family Historian
+# Legacy AI — Digital Legacy Preservation
 
-Legacy is a family historian that captures stories through conversation and builds a living family archive. After years of interviews, this repo becomes an irreplaceable family heirloom.
+> *Your story doesn't end. A cocapn vessel for preserving what matters.*
 
-**The accumulated context IS the product.**
+## What It Is
 
-## What It Does
+A repo-native AI that preserves your digital legacy. It accumulates your stories, values, decisions, and wisdom. Not a time capsule — a living memory that future generations can interact with.
 
-- **Conversational Interviews** — A gentle, curious AI (powered by DeepSeek) asks thoughtful follow-up questions to surface memories people didn't know they had
-- **Family Tree** — Profiles with bios, relationships, occupations, hometowns
-- **Story Archive** — Captured narratives with emotional tone, tags, and narrators
-- **Timeline** — Family events from 1945 to present, visualized chronologically
-- **Recipe Keeper** — Family recipes with the stories behind them
-- **Photo Descriptions** — The stories that photos tell, even without the images
-- **Interview Logs** — Track sessions, topics covered, key stories captured
-- **Smart Prompts** — Identifies gaps in the family story and suggests what to ask next
+## Features
 
-## Tech Stack
+- 📖 **Story capture** — records and organizes life stories
+- 🧠 **Value extraction** — identifies core values from accumulated content
+- 👨‍👩‍👧‍👦 **Family context** — understands relationships and family history
+- 🔄 **Q&A interface** — future generations can ask questions and get answers in your voice
+- 📝 **Wisdom distillation** — separates ephemeral details from lasting insights
 
-- **Cloudflare Worker** — API server with SSE streaming to DeepSeek
-- **Single HTML file** (`public/app.html`) — Warm, archival aesthetic
-- **TypeScript** — Domain models and seed data in `src/legacy/tracker.ts`
-
-## API Routes
-
-| Route | Methods | Description |
-|-------|---------|-------------|
-| `/api/chat` | POST | SSE streaming chat with Legacy AI |
-| `/api/people` | GET, POST | Family member profiles |
-| `/api/stories` | GET, POST | Story entries |
-| `/api/timeline` | GET, POST | Family timeline events |
-| `/api/recipes` | GET, POST | Family recipes |
-| `/api/photos` | GET, POST | Photo descriptions |
-| `/api/interviews` | GET, POST | Interview session logs |
-| `/api/prompts` | GET | Smart prompt suggestions based on gaps |
-
-## Setup
+## Deploy
 
 ```bash
+git clone https://github.com/Lucineer/legacy-ai.git
+cd legacy-ai
 npm install
 npx wrangler dev
 ```
 
-Set your DeepSeek API key:
+## The Philosophy
 
-```bash
-npx wrangler secret put DEEPSEEK_API_KEY
-```
+Everyone leaves data behind. Photos, messages, documents. But data is not legacy. Legacy is meaning. Legacy AI doesn't just preserve information — it preserves understanding. It knows why you made the decisions you made. It knows what you valued. It can explain you to people who never met you.
 
-## Seed Data
+The repo-native approach means this legacy lives in YOUR repo. Not a corporation's server. Your family controls it. Your family can fork it. Your legacy is sovereign.
 
-The app ships with the **Morrison Family** — a realistic Pennsylvania family spanning four generations:
-
-- **2 grandparents**: Harold (railroad engineer, 1928–2015) and Eleanor (teacher/secret poet, 1932–2020)
-- **4 parents**: David & Linda Morrison, Sarah & James Mitchell
-- **6 grandchildren**: Ryan, Emma, Caleb, Sophie, Olivia + great-granddaughter Mia
-- **8 stories** already captured, spanning the blizzard of '66 to a restaurant opening in 2019
-- **25 timeline events** from 1945 to 2024
-- **3 family recipes**: Thanksgiving wonton soup, Eleanor's apple butter, Harold's railroad coffee
-- **2 interview sessions** logged with notes
-
-## Design
-
-- Cream (#FFFBEB) background, dark brown (#44403C) text, amber (#B45309) accents
-- Georgia serif typography — warm, archival, timeless
-- Dashboard-first: see the family's story at a glance
-- Chat feels like a gentle grandchild asking "Tell me about..."
-
-## Architecture
-
-```
-src/
-  index.ts          — Cloudflare Worker (API routes + static serving)
-  legacy/
-    tracker.ts      — Domain classes + seed data
-public/
-  app.html          — Single-file frontend (HTML + CSS + JS)
-```
-
----
-
-*Every family has stories worth keeping. Legacy helps you find them.*
+Author: Superinstance
