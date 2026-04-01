@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legacy — Family Historian</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #FFFBEB;
+  --cream-dark: #FEF3C7;
+  --brown: #44403C;
+  --brown-light: #78716C;
+  --amber: #B45309;
+  --amber-light: #D97706;
+  --amber-pale: #FDE68A;
+  --amber-bg: #FEF3C7;
+  --white: #FFFFFF;
+  --border: #D6D3D1;
+  --card-bg: #FFFBEB;
+  --shadow: 0 1px 3px rgba(68,64,60,0.1), 0 1px 2px rgba(68,64,60,0.06);
+  --shadow-lg: 0 4px 12px rgba(68,64,60,0.12);
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background: var(--cream);
+  color: var(--brown);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Header ─────────────────────────────────────── */
+
+.header {
+  background: var(--brown);
+  color: var(--cream);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-lg);
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+.header h1 span { color: var(--amber-light); }
+
+.header .subtitle {
+  font-size: 0.8rem;
+  color: var(--brown-light);
+  font-style: italic;
+}
+
+/* ── Navigation ─────────────────────────────────── */
+
+.nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  padding: 0 1rem;
+}
+
+.nav button {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-family: Georgia, serif;
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.nav button:hover { color: var(--brown); }
+.nav button.active {
+  color: var(--amber);
+  border-bottom-color: var(--amber);
+  font-weight: 600;
+}
+
+/* ── Main Content ───────────────────────────────── */
+
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ── Dashboard ──────────────────────────────────── */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.stat-card .stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--amber);
+  line-height: 1;
+}
+
+.stat-card .stat-label {
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  color: var(--brown);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--amber-pale);
+}
+
+/* ── Cards ──────────────────────────────────────── */
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s;
+}
+
+.card:hover { box-shadow: var(--shadow-lg); }
+
+.card h3 {
+  font-size: 1.1rem;
+  color: var(--brown);
+  margin-bottom: 0.5rem;
+}
+
+.card .meta {
+  font-size: 0.8rem;
+  color: var(--brown-light);
+  margin-bottom: 0.75rem;
+  font-style: italic;
+}
+
+.card p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.card .tags {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  background: var(--amber-bg);
+  color: var(--amber);
+  padding: 0.15rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-family: system-ui, sans-serif;
+}
+
+.tone-badge {
+  display: inline-block;
+  background: var(--amber);
+  color: var(--cream);
+  padding: 0.15rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-family: system-ui, sans-serif;
+  text-transform: capitalize;
+}
+
+/* ── Person Card ────────────────────────────────── */
+
+.person-card {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.person-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--amber-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: var(--amber);
+  flex-shrink: 0;
+  font-family: system-ui, sans-serif;
+  font-weight: 700;
+}
+
+.person-info h3 { margin-bottom: 0.25rem; }
+.person-info .meta { margin-bottom: 0.5rem; }
+
+/* ── Timeline ───────────────────────────────────── */
+
+.timeline-container {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--amber-pale);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.65rem;
+  top: 0.4rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--amber);
+  border: 2px solid var(--white);
+  box-shadow: 0 0 0 2px var(--amber-pale);
+}
+
+.timeline-item .year {
+  font-size: 0.8rem;
+  color: var(--amber);
+  font-weight: 700;
+  font-family: system-ui, sans-serif;
+}
+
+.timeline-item h3 { font-size: 1rem; margin: 0.25rem 0; }
+
+.timeline-item p {
+  font-size: 0.9rem;
+  color: var(--brown-light);
+}
+
+.timeline-type {
+  display: inline-block;
+  background: var(--amber-bg);
+  color: var(--amber);
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-family: system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Recipes ────────────────────────────────────── */
+
+.recipe-card { border-left: 3px solid var(--amber); }
+
+.recipe-card .ingredients {
+  background: var(--cream);
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 0.75rem 0;
+  font-size: 0.9rem;
+}
+
+.recipe-card .ingredients h4 {
+  font-size: 0.85rem;
+  color: var(--amber);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: system-ui, sans-serif;
+}
+
+.recipe-card .ingredients ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recipe-card .ingredients li::before {
+  content: '· ';
+  color: var(--amber);
+  font-weight: 700;
+}
+
+.recipe-card .backstory {
+  font-style: italic;
+  color: var(--brown-light);
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+/* ── Chat ───────────────────────────────────────── */
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px);
+  min-height: 500px;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+
+.chat-msg {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.chat-msg.user { flex-direction: row-reverse; }
+
+.chat-bubble {
+  max-width: 70%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.chat-msg.assistant .chat-bubble {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-msg.user .chat-bubble {
+  background: var(--brown);
+  color: var(--cream);
+  border-bottom-right-radius: 4px;
+}
+
+.chat-msg .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  font-family: system-ui, sans-serif;
+}
+
+.chat-msg.assistant .avatar {
+  background: var(--amber-pale);
+  color: var(--amber);
+}
+
+.chat-msg.user .avatar {
+  background: var(--brown);
+  color: var(--cream);
+}
+
+.chat-input-area {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.chat-input-area textarea {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  background: var(--white);
+  color: var(--brown);
+  resize: none;
+  outline: none;
+  min-height: 48px;
+  max-height: 120px;
+}
+
+.chat-input-area textarea:focus { border-color: var(--amber); }
+
+.chat-input-area button {
+  background: var(--amber);
+  color: var(--cream);
+  border: none;
+  border-radius: 8px;
+  padding: 0 1.25rem;
+  cursor: pointer;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.chat-input-area button:hover { background: var(--amber-light); }
+
+.chat-input-area button:disabled {
+  background: var(--brown-light);
+  cursor: not-allowed;
+}
+
+.typing-indicator {
+  display: inline-block;
+}
+
+.typing-indicator span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brown-light);
+  margin: 0 1px;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+/* ── Prompts / Gaps ─────────────────────────────── */
+
+.prompt-card {
+  border-left: 3px solid var(--amber);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.prompt-card:hover { border-left-color: var(--amber-light); }
+
+/* ── Interviews ─────────────────────────────────── */
+
+.interview-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+
+.interview-topic {
+  background: var(--cream-dark);
+  color: var(--brown);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-family: system-ui, sans-serif;
+}
+
+/* ── Photos ─────────────────────────────────────── */
+
+.photo-card .photo-placeholder {
+  background: var(--cream-dark);
+  border-radius: 6px;
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--brown-light);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.photo-card .photo-placeholder::before {
+  content: '📷';
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Modal ──────────────────────────────────────── */
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(68,64,60,0.5);
+  z-index: 200;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  margin-top: 2rem;
+}
+
+.modal h2 { margin-bottom: 1.25rem; color: var(--amber); }
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--brown-light);
+  cursor: pointer;
+}
+
+.modal label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--brown-light);
+  margin-bottom: 0.25rem;
+  margin-top: 0.75rem;
+  font-family: system-ui, sans-serif;
+}
+
+.modal input, .modal textarea, .modal select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+  background: var(--white);
+  color: var(--brown);
+  outline: none;
+}
+
+.modal input:focus, .modal textarea:focus { border-color: var(--amber); }
+.modal textarea { min-height: 80px; resize: vertical; }
+
+.modal .btn-submit {
+  margin-top: 1.25rem;
+  background: var(--amber);
+  color: var(--cream);
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.5rem;
+  cursor: pointer;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+}
+
+.modal .btn-submit:hover { background: var(--amber-light); }
+
+/* ── Responsive ─────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .header { padding: 0.75rem 1rem; }
+  .header h1 { font-size: 1.2rem; }
+  .main { padding: 1rem; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .chat-bubble { max-width: 85%; }
+}
+
+/* ── Utility ────────────────────────────────────── */
+
+.fade-in { animation: fadeIn 0.3s ease-in; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--brown-light);
+  font-style: italic;
+}
+
+.add-btn {
+  background: var(--amber);
+  color: var(--cream);
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-family: Georgia, serif;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  transition: background 0.2s;
+}
+.add-btn:hover { background: var(--amber-light); }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div>
+    <h1><span>Legacy</span></h1>
+    <div class="subtitle">A family historian — capturing stories before they fade</div>
+  </div>
+</header>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <button class="active" data-tab="dashboard">Dashboard</button>
+  <button data-tab="family">Family Tree</button>
+  <button data-tab="stories">Stories</button>
+  <button data-tab="timeline">Timeline</button>
+  <button data-tab="recipes">Recipes</button>
+  <button data-tab="photos">Photos</button>
+  <button data-tab="interviews">Interviews</button>
+  <button data-tab="chat">Chat</button>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+
+  <!-- Dashboard -->
+  <div class="tab-content active" id="tab-dashboard">
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <h2 class="section-title">Stories to Capture</h2>
+    <div id="gaps-list"></div>
+
+    <h2 class="section-title" style="margin-top:2rem;">Recent Stories</h2>
+    <div id="recent-stories"></div>
+  </div>
+
+  <!-- Family Tree -->
+  <div class="tab-content" id="tab-family">
+    <button class="add-btn" onclick="openModal('person-modal')">+ Add Family Member</button>
+    <div id="family-list"></div>
+  </div>
+
+  <!-- Stories -->
+  <div class="tab-content" id="tab-stories">
+    <button class="add-btn" onclick="openModal('story-modal')">+ Capture a Story</button>
+    <div id="stories-list"></div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="tab-content" id="tab-timeline">
+    <button class="add-btn" onclick="openModal('timeline-modal')">+ Add Timeline Event</button>
+    <div class="timeline-container" id="timeline-list"></div>
+  </div>
+
+  <!-- Recipes -->
+  <div class="tab-content" id="tab-recipes">
+    <button class="add-btn" onclick="openModal('recipe-modal')">+ Add Family Recipe</button>
+    <div id="recipes-list"></div>
+  </div>
+
+  <!-- Photos -->
+  <div class="tab-content" id="tab-photos">
+    <button class="add-btn" onclick="openModal('photo-modal')">+ Add Photo Description</button>
+    <div id="photos-list"></div>
+  </div>
+
+  <!-- Interviews -->
+  <div class="tab-content" id="tab-interviews">
+    <button class="add-btn" onclick="openModal('interview-modal')">+ Log Interview</button>
+    <div id="interviews-list"></div>
+  </div>
+
+  <!-- Chat -->
+  <div class="tab-content" id="tab-chat">
+    <div class="chat-container">
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-msg assistant">
+          <div class="avatar">L</div>
+          <div class="chat-bubble">Hello. I'm Legacy, your family historian. I'm here to listen and help you capture the stories that matter most.<br><br>What would you like to tell me about today? A memory, a person, a moment in time — whatever comes to mind.</div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <textarea id="chat-input" placeholder="Tell me a story..." rows="1" onkeydown="handleChatKey(event)"></textarea>
+        <button id="chat-send" onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Modals -->
+<div class="modal-overlay" id="person-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('person-modal')">&times;</button>
+    <h2>Add Family Member</h2>
+    <label>Name</label><input id="p-name" placeholder="Full name">
+    <label>Birth Year</label><input id="p-birth" type="number" placeholder="e.g. 1955">
+    <label>Death Year (if applicable)</label><input id="p-death" type="number" placeholder="Leave blank if living">
+    <label>Relationships</label><textarea id="p-rel" placeholder="One per line: Wife of..., Mother of..."></textarea>
+    <label>Occupation</label><input id="p-occ" placeholder="e.g. Teacher, Engineer">
+    <label>Hometown</label><input id="p-home" placeholder="e.g. Altoona, Pennsylvania">
+    <label>Brief Bio</label><textarea id="p-bio" placeholder="A short biography"></textarea>
+    <button class="btn-submit" onclick="addPerson()">Save</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="story-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('story-modal')">&times;</button>
+    <h2>Capture a Story</h2>
+    <label>Title</label><input id="s-title" placeholder="Give this story a name">
+    <label>Narrator</label><select id="s-narrator"></select>
+    <label>Date of Event</label><input id="s-date" placeholder="e.g. 1975, Summer 1985">
+    <label>The Story</label><textarea id="s-text" rows="6" placeholder="Tell it in your own words..."></textarea>
+    <label>Tags (comma separated)</label><input id="s-tags" placeholder="e.g. childhood, holidays, Grandma">
+    <label>Emotional Tone</label>
+    <select id="s-tone">
+      <option value="warm">Warm</option>
+      <option value="bittersweet">Bittersweet</option>
+      <option value="joyful">Joyful</option>
+      <option value="tender">Tender</option>
+      <option value="proud">Proud</option>
+      <option value="triumphant">Triumphant</option>
+      <option value="funny">Funny</option>
+      <option value="reflective">Reflective</option>
+      <option value="sad">Sad</option>
+    </select>
+    <button class="btn-submit" onclick="addStory()">Save Story</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="timeline-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('timeline-modal')">&times;</button>
+    <h2>Add Timeline Event</h2>
+    <label>Year</label><input id="t-year" type="number" placeholder="e.g. 1985">
+    <label>Title</label><input id="t-title" placeholder="What happened?">
+    <label>Description</label><textarea id="t-desc" placeholder="Tell the story behind this event"></textarea>
+    <label>Type</label>
+    <select id="t-type">
+      <option value="birth">Birth</option>
+      <option value="marriage">Marriage</option>
+      <option value="move">Move</option>
+      <option value="career">Career</option>
+      <option value="milestone">Milestone</option>
+      <option value="education">Education</option>
+      <option value="travel">Travel</option>
+    </select>
+    <button class="btn-submit" onclick="addTimelineEvent()">Save Event</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="recipe-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('recipe-modal')">&times;</button>
+    <h2>Add Family Recipe</h2>
+    <label>Recipe Name</label><input id="r-name" placeholder="e.g. Grandma's Apple Butter">
+    <label>Originator</label><select id="r-originator"></select>
+    <label>Ingredients (one per line)</label><textarea id="r-ingredients" rows="5" placeholder="One ingredient per line"></textarea>
+    <label>Instructions</label><textarea id="r-instructions" rows="4" placeholder="How to make it"></textarea>
+    <label>The Story Behind It</label><textarea id="r-backstory" rows="4" placeholder="Every family recipe has a story..."></textarea>
+    <label>Occasion</label><input id="r-occasion" placeholder="e.g. Thanksgiving, Every Sunday">
+    <button class="btn-submit" onclick="addRecipe()">Save Recipe</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="photo-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('photo-modal')">&times;</button>
+    <h2>Add Photo Description</h2>
+    <label>Description of the Photo</label><textarea id="ph-desc" rows="3" placeholder="What does this photo show?"></textarea>
+    <label>Approximate Date</label><input id="ph-date" placeholder="e.g. Summer 1985">
+    <label>People in the Photo</label><input id="ph-people" placeholder="Names, comma separated">
+    <label>The Story Behind the Photo</label><textarea id="ph-backstory" rows="4" placeholder="What was happening when this was taken?"></textarea>
+    <button class="btn-submit" onclick="addPhoto()">Save Photo</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="interview-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('interview-modal')">&times;</button>
+    <h2>Log Interview Session</h2>
+    <label>Date</label><input id="i-date" type="date">
+    <label>Interviewee</label><select id="i-person"></select>
+    <label>Topics Covered (comma separated)</label><input id="i-topics" placeholder="e.g. childhood, career, Grandma">
+    <label>Key Stories Captured (comma separated)</label><input id="i-stories" placeholder="Story titles or descriptions">
+    <label>Duration</label><input id="i-duration" placeholder="e.g. 1 hour 30 minutes">
+    <label>Notes</label><textarea id="i-notes" placeholder="Observations, follow-ups needed..."></textarea>
+    <button class="btn-submit" onclick="addInterview()">Save Interview</button>
+  </div>
+</div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────────
+
+let people = [];
+let stories = [];
+let timelineEvents = [];
+let recipes = [];
+let photos = [];
+let interviews = [];
+let chatMessages = [];
+let prompts = [];
+
+// ── API ──────────────────────────────────────────────────────────────────────
+
+const API = '/api';
+
+async function apiGet(path) {
+  const r = await fetch(`${API}/${path}`);
+  return r.json();
+}
+
+async function apiPost(path, data) {
+  const r = await fetch(`${API}/${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return r.json();
+}
+
+// ── Navigation ───────────────────────────────────────────────────────────────
+
+document.querySelectorAll('.nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+  });
+});
+
+// ── Modal ────────────────────────────────────────────────────────────────────
+
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('active');
+  });
+});
+
+// ── Render Functions ─────────────────────────────────────────────────────────
+
+function getInitials(name) {
+  return name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function renderDashboard() {
+  // Stats
+  const livingPeople = people.filter(p => !p.deathYear);
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-number">${people.length}</div><div class="stat-label">Family Members</div></div>
+    <div class="stat-card"><div class="stat-number">${stories.length}</div><div class="stat-label">Stories Captured</div></div>
+    <div class="stat-card"><div class="stat-number">${interviews.length}</div><div class="stat-label">Interview Sessions</div></div>
+    <div class="stat-card"><div class="stat-number">${prompts.length}</div><div class="stat-label">Gaps to Fill</div></div>
+    <div class="stat-card"><div class="stat-number">${timelineEvents.length}</div><div class="stat-label">Timeline Events</div></div>
+    <div class="stat-card"><div class="stat-number">${recipes.length}</div><div class="stat-label">Family Recipes</div></div>
+  `;
+
+  // Gaps
+  const gapsHtml = prompts.slice(0, 4).map(p => `
+    <div class="card prompt-card fade-in" onclick="startChatWithPrompt('${escapeHtml(p.prompt).replace(/'/g, "\\'")}')">
+      <p>${escapeHtml(p.prompt)}</p>
+      <div class="tags"><span class="tag">${p.category}</span></div>
+    </div>
+  `).join('');
+  document.getElementById('gaps-list').innerHTML = gapsHtml || '<div class="empty-state">No gaps identified — the archive is rich!</div>';
+
+  // Recent stories
+  const recent = stories.slice(0, 3);
+  document.getElementById('recent-stories').innerHTML = recent.map(s => {
+    const narrator = people.find(p => p.id === s.narratorId);
+    return `
+      <div class="card fade-in">
+        <h3>${escapeHtml(s.title)}</h3>
+        <div class="meta">${narrator ? narrator.name : 'Unknown'} · ${s.dateOfEvent || 'Date unknown'} · <span class="tone-badge">${s.emotionalTone}</span></div>
+        <p>${escapeHtml(s.text.substring(0, 200))}${s.text.length > 200 ? '...' : ''}</p>
+      </div>
+    `;
+  }).join('') || '<div class="empty-state">No stories yet. Start a conversation to capture your first one.</div>';
+}
+
+function renderFamily() {
+  document.getElementById('family-list').innerHTML = people.map(p => `
+    <div class="card fade-in">
+      <div class="person-card">
+        <div class="person-avatar">${getInitials(p.name)}</div>
+        <div class="person-info">
+          <h3>${escapeHtml(p.name)} ${p.deathYear ? '<span style="color:var(--brown-light);font-size:0.8rem;">(' + p.birthYear + '–' + p.deathYear + ')</span>' : p.birthYear ? '<span style="color:var(--brown-light);font-size:0.8rem;">(b. ' + p.birthYear + ')</span>' : ''}</h3>
+          <div class="meta">${p.occupation || ''} ${p.hometown ? '· ' + p.hometown : ''}</div>
+          ${p.relationships.length ? '<div class="tags">' + p.relationships.map(r => '<span class="tag">' + escapeHtml(r) + '</span>').join('') + '</div>' : ''}
+          ${p.bio ? '<p style="margin-top:0.5rem;">' + escapeHtml(p.bio.substring(0, 200)) + (p.bio.length > 200 ? '...' : '') + '</p>' : ''}
+        </div>
+      </div>
+    </div>
+  `).join('') || '<div class="empty-state">No family members recorded yet.</div>';
+}
+
+function renderStories() {
+  document.getElementById('stories-list').innerHTML = stories.map(s => {
+    const narrator = people.find(p => p.id === s.narratorId);
+    return `
+      <div class="card fade-in">
+        <h3>${escapeHtml(s.title)}</h3>
+        <div class="meta">${narrator ? narrator.name : 'Unknown'} · ${s.dateOfEvent || 'Date unknown'} · <span class="tone-badge">${s.emotionalTone}</span></div>
+        <p>${escapeHtml(s.text)}</p>
+        <div class="tags">${s.tags.map(t => '<span class="tag">' + escapeHtml(t) + '</span>').join('')}</div>
+      </div>
+    `;
+  }).join('') || '<div class="empty-state">No stories captured yet.</div>';
+}
+
+function renderTimeline() {
+  document.getElementById('timeline-list').innerHTML = timelineEvents.map(e => `
+    <div class="timeline-item fade-in">
+      <div><span class="year">${e.year}</span> <span class="timeline-type">${e.type}</span></div>
+      <h3>${escapeHtml(e.title)}</h3>
+      <p>${escapeHtml(e.description)}</p>
+    </div>
+  `).join('') || '<div class="empty-state">No timeline events yet.</div>';
+}
+
+function renderRecipes() {
+  document.getElementById('recipes-list').innerHTML = recipes.map(r => {
+    const originator = people.find(p => p.id === r.originatorId);
+    return `
+      <div class="card recipe-card fade-in">
+        <h3>${escapeHtml(r.name)}</h3>
+        <div class="meta">${originator ? originator.name : 'Unknown'} ${r.occasion ? '· ' + r.occasion : ''}</div>
+        <div class="ingredients">
+          <h4>Ingredients</h4>
+          <ul>${r.ingredients.map(i => '<li>' + escapeHtml(i) + '</li>').join('')}</ul>
+        </div>
+        <p><strong>Instructions:</strong> ${escapeHtml(r.instructions)}</p>
+        <div class="backstory">${escapeHtml(r.backstory)}</div>
+      </div>
+    `;
+  }).join('') || '<div class="empty-state">No family recipes recorded yet.</div>';
+}
+
+function renderPhotos() {
+  document.getElementById('photos-list').innerHTML = photos.map(ph => `
+    <div class="card photo-card fade-in">
+      <div class="photo-placeholder">${escapeHtml(ph.description)}</div>
+      <div class="meta">${ph.date || 'Date unknown'}</div>
+      <h3>The Story Behind This Photo</h3>
+      <p>${escapeHtml(ph.backStory)}</p>
+      ${ph.peopleIds.length ? '<div class="tags" style="margin-top:0.5rem;">' + ph.peopleIds.map(id => {
+        const p = people.find(x => x.id === id);
+        return '<span class="tag">' + (p ? p.name : id) + '</span>';
+      }).join('') + '</div>' : ''}
+    </div>
+  `).join('') || '<div class="empty-state">No photos described yet.</div>';
+}
+
+function renderInterviews() {
+  document.getElementById('interviews-list').innerHTML = interviews.map(i => {
+    const interviewee = people.find(p => p.id === i.intervieweeId);
+    return `
+      <div class="card fade-in">
+        <h3>${i.date} — ${interviewee ? interviewee.name : 'Unknown'}</h3>
+        <div class="meta">${i.duration || ''}</div>
+        <div class="interview-topics">${i.topics.map(t => '<span class="interview-topic">' + escapeHtml(t) + '</span>').join('')}</div>
+        ${i.keyStories.length ? '<p><strong>Key stories:</strong> ' + i.keyStories.map(s => escapeHtml(s)).join(', ') + '</p>' : ''}
+        ${i.notes ? '<p style="margin-top:0.5rem;color:var(--brown-light);font-style:italic;">' + escapeHtml(i.notes) + '</p>' : ''}
+      </div>
+    `;
+  }).join('') || '<div class="empty-state">No interviews logged yet.</div>';
+}
+
+function populateSelects() {
+  const narratorSelects = ['s-narrator', 'r-originator', 'i-person'];
+  narratorSelects.forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Select a person...</option>' +
+      people.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+  });
+}
+
+// ── Add Functions ────────────────────────────────────────────────────────────
+
+function uid() { return 'id-' + Math.random().toString(36).substring(2, 10); }
+
+async function addPerson() {
+  const person = {
+    id: uid(),
+    name: document.getElementById('p-name').value,
+    birthYear: document.getElementById('p-birth').value ? parseInt(document.getElementById('p-birth').value) : undefined,
+    deathYear: document.getElementById('p-death').value ? parseInt(document.getElementById('p-death').value) : undefined,
+    relationships: document.getElementById('p-rel').value.split('\n').filter(Boolean),
+    occupation: document.getElementById('p-occ').value || undefined,
+    hometown: document.getElementById('p-home').value || undefined,
+    bio: document.getElementById('p-bio').value || undefined,
+    photoDescription: undefined,
+  };
+  await apiPost('people', person);
+  people.push(person);
+  renderFamily();
+  populateSelects();
+  closeModal('person-modal');
+}
+
+async function addStory() {
+  const story = {
+    id: uid(),
+    title: document.getElementById('s-title').value,
+    narratorId: document.getElementById('s-narrator').value,
+    dateOfEvent: document.getElementById('s-date').value || undefined,
+    text: document.getElementById('s-text').value,
+    tags: document.getElementById('s-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+    emotionalTone: document.getElementById('s-tone').value,
+    createdAt: new Date().toISOString(),
+  };
+  await apiPost('stories', story);
+  stories.unshift(story);
+  renderStories();
+  renderDashboard();
+  closeModal('story-modal');
+}
+
+async function addTimelineEvent() {
+  const event = {
+    id: uid(),
+    year: parseInt(document.getElementById('t-year').value),
+    title: document.getElementById('t-title').value,
+    description: document.getElementById('t-desc').value,
+    peopleIds: [],
+    type: document.getElementById('t-type').value,
+  };
+  await apiPost('timeline', event);
+  timelineEvents.push(event);
+  timelineEvents.sort((a, b) => a.year - b.year);
+  renderTimeline();
+  renderDashboard();
+  closeModal('timeline-modal');
+}
+
+async function addRecipe() {
+  const recipe = {
+    id: uid(),
+    name: document.getElementById('r-name').value,
+    originatorId: document.getElementById('r-originator').value,
+    ingredients: document.getElementById('r-ingredients').value.split('\n').filter(Boolean),
+    instructions: document.getElementById('r-instructions').value,
+    backstory: document.getElementById('r-backstory').value,
+    occasion: document.getElementById('r-occasion').value || undefined,
+  };
+  await apiPost('recipes', recipe);
+  recipes.push(recipe);
+  renderRecipes();
+  renderDashboard();
+  closeModal('recipe-modal');
+}
+
+async function addPhoto() {
+  const peopleNames = document.getElementById('ph-people').value.split(',').map(n => n.trim()).filter(Boolean);
+  const peopleIds = peopleNames.map(n => {
+    const p = people.find(x => x.name.toLowerCase().includes(n.toLowerCase()));
+    return p ? p.id : n;
+  });
+  const photo = {
+    id: uid(),
+    description: document.getElementById('ph-desc').value,
+    date: document.getElementById('ph-date').value || undefined,
+    peopleIds: peopleIds,
+    backStory: document.getElementById('ph-backstory').value,
+  };
+  await apiPost('photos', photo);
+  photos.push(photo);
+  renderPhotos();
+  closeModal('photo-modal');
+}
+
+async function addInterview() {
+  const interview = {
+    id: uid(),
+    date: document.getElementById('i-date').value,
+    intervieweeId: document.getElementById('i-person').value,
+    topics: document.getElementById('i-topics').value.split(',').map(t => t.trim()).filter(Boolean),
+    keyStories: document.getElementById('i-stories').value.split(',').map(s => s.trim()).filter(Boolean),
+    duration: document.getElementById('i-duration').value || undefined,
+    notes: document.getElementById('i-notes').value || undefined,
+  };
+  await apiPost('interviews', interview);
+  interviews.unshift(interview);
+  renderInterviews();
+  renderDashboard();
+  closeModal('interview-modal');
+}
+
+// ── Chat ─────────────────────────────────────────────────────────────────────
+
+function appendChatMsg(role, content) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role} fade-in`;
+  div.innerHTML = `
+    <div class="avatar">${role === 'assistant' ? 'L' : 'Y'}</div>
+    <div class="chat-bubble">${escapeHtml(content)}</div>
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function appendStreamingMsg() {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg assistant fade-in';
+  div.id = 'streaming-msg';
+  div.innerHTML = `
+    <div class="avatar">L</div>
+    <div class="chat-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return div;
+}
+
+function updateStreamingMsg(div, content) {
+  const bubble = div.querySelector('.chat-bubble');
+  bubble.textContent = content;
+  const container = document.getElementById('chat-messages');
+  container.scrollTop = container.scrollHeight;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  chatMessages.push({ role: 'user', content: text });
+  appendChatMsg('user', text);
+
+  document.getElementById('chat-send').disabled = true;
+  const streamDiv = appendStreamingMsg();
+
+  try {
+    const response = await fetch(`${API}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: chatMessages }),
+    });
+
+    if (!response.ok) throw new Error('Chat request failed');
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let fullContent = '';
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') continue;
+          try {
+            const parsed = JSON.parse(data);
+            const delta = parsed.choices?.[0]?.delta?.content;
+            if (delta) {
+              fullContent += delta;
+              updateStreamingMsg(streamDiv, fullContent);
+            }
+          } catch (e) { /* skip non-JSON lines */ }
+        }
+      }
+    }
+
+    chatMessages.push({ role: 'assistant', content: fullContent });
+  } catch (err) {
+    updateStreamingMsg(streamDiv, 'I seem to have lost my train of thought. Could you say that again? (Error connecting to the historian.)');
+  }
+
+  document.getElementById('chat-send').disabled = false;
+  input.focus();
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChat();
+  }
+}
+
+// Auto-resize textarea
+document.getElementById('chat-input').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+
+function startChatWithPrompt(prompt) {
+  // Switch to chat tab
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector('[data-tab="chat"]').classList.add('active');
+  document.getElementById('tab-chat').classList.add('active');
+  // Set prompt
+  document.getElementById('chat-input').value = prompt;
+  document.getElementById('chat-input').focus();
+}
+
+// ── Initialize ───────────────────────────────────────────────────────────────
+
+async function init() {
+  try {
+    const [p, s, t, r, ph, i, pr] = await Promise.all([
+      apiGet('people'),
+      apiGet('stories'),
+      apiGet('timeline'),
+      apiGet('recipes'),
+      apiGet('photos'),
+      apiGet('interviews'),
+      apiGet('prompts'),
+    ]);
+    people = p;
+    stories = s;
+    timelineEvents = t;
+    recipes = r;
+    photos = ph;
+    interviews = i;
+    prompts = pr;
+  } catch (e) {
+    console.error('Failed to load data:', e);
+  }
+
+  renderDashboard();
+  renderFamily();
+  renderStories();
+  renderTimeline();
+  renderRecipes();
+  renderPhotos();
+  renderInterviews();
+  populateSelects();
+}
+
+init();
+</script>
+</body>
+</html>
