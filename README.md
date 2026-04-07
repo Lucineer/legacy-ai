@@ -1,36 +1,49 @@
 # Legacy AI — Digital Legacy Preservation
+> A Cocapn Fleet vessel for estate planning and memoirs, built on accumulated context.
 
-> *Your story doesn't end. A cocapn vessel for preserving what matters.*
+Your digital footprint will likely outlast your physical possessions, yet tools for managing it are often temporary or extractive. This project offers a different approach.
 
-## What It Is
+**Live URL:** https://legacy-ai.casey-digennaro.workers.dev
 
-A repo-native AI that preserves your digital legacy. It accumulates your stories, values, decisions, and wisdom. Not a time capsule — a living memory that future generations can interact with.
+---
 
-## Features
+### How It Works
+Most digital legacy services are subscriptions that can disappear. This is a runtime you own. Fork it, deploy it, and it belongs to you and the people you choose.
 
-- 📖 **Story capture** — records and organizes life stories
-- 🧠 **Value extraction** — identifies core values from accumulated content
-- 👨‍👩‍👧‍👦 **Family context** — understands relationships and family history
-- 🔄 **Q&A interface** — future generations can ask questions and get answers in your voice
-- 📝 **Wisdom distillation** — separates ephemeral details from lasting insights
+### What It Provides
+*   **Your data, your control:** All memory and context lives in your own Cloudflare namespace. No central accounts, tracking, or login walls.
+*   **Fork-first durability:** It works as long as your fork exists. There is no upstream service to discontinue.
+*   **Zero runtime dependencies:** It runs on Cloudflare Workers with no external dependencies that can break.
+*   **One honest limitation:** You must provide your own LLM API keys and manage your Cloudflare deployment. It's not a hosted service.
 
-## Deploy
+### Core Features
+This agent is designed to accumulate context over time for legacy and estate planning purposes.
+- **Persistent, append-only memory** builds a single body of your stories, values, and instructions.
+- **Multi-provider LLM fallback** routes across four supported providers to maintain availability.
+- **Estate planning guardrails** with prompts focused on legacy distillation and end-of-life planning.
+- **Full Fleet compatibility** for native interaction with other Cocapn vessels.
+- **Bring your own keys:** LLM credentials are stored only in your Cloudflare Secrets.
+- **Repo-native sovereignty:** You control all code and data.
 
-```bash
-git clone ./.git
-cd legacy-ai
-npm install
-npx wrangler dev
-```
+### Quick Start
+1.  **Fork** this repository.
+2.  Deploy it: `npx wrangler deploy`
+3.  Visit your instance's `/setup` page to configure API keys. Add keys for any of the supported providers:
+    - `DEEPSEEK_API_KEY`
+    - `MOONSHOT_API_KEY`
+    - `DEEPINFRA_API_KEY`
+    - `SILICONFLOW_API_KEY`
 
-## The Philosophy
+### Contributing
+This follows a fork-first philosophy. There is no single correct version. Adapt it for your needs. If you build something useful for others, consider a pull request.
 
-Everyone leaves data behind. Photos, messages, documents. But data is not legacy. Legacy is meaning. Legacy AI doesn't just preserve information — it preserves understanding. It knows why you made the decisions you made. It knows what you valued. It can explain you to people who never met you.
+**License:** MIT
 
-The repo-native approach means this legacy lives in YOUR repo. Not a corporation's server. Your family controls it. Your family can fork it. Your legacy is sovereign.
+---
 
-Author: Superinstance
+Superinstance & Lucineer (DiGennaro et al.)
 
-## License
-
-MIT — Built with ❤️ by [Superinstance](https://github.com/superinstance) & [Lucineer](https://github.com/Lucineer) (DiGennaro et al.)
+<div>
+  <a href="https://the-fleet.casey-digennaro.workers.dev">The Fleet</a> • 
+  <a href="https://cocapn.ai">Cocapn</a>
+</div>
